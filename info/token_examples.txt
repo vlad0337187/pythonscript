@@ -1,0 +1,37 @@
+'''
+Sample code showing file.
+'''
+
+import os
+import sys
+from sys import path, modules
+uses my_encoding_checker
+
+
+my_files_write = def text='None'
+    cur_files_dir = os.path.dirname __file__
+    writing_dir = os.path.join cur_files_dir, 'filelist'
+    target_file_path = os.path.join writing_dir 'temporary_file'
+    with (open target_file_path, 'tw') as file_obj
+        file.write "string"
+
+    with open target_file_path, 'tr': file.read do
+    return True
+
+
+my_files_write_2 = def text='None': return False
+
+
+RecursiveParser = class: parameter = 4; b = def *args: print args
+
+
+RecursiveParser2 = class RecursiveParser
+    '''
+    Some recursive parser.
+    '''
+    parse_file = def file_path
+        file_text = open file_path, 'tr' .read do .upper do
+        return file_text
+
+    @staticmethod
+    launch_parsing = def: parse_file do
