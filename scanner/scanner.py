@@ -131,13 +131,8 @@ def tokenize(source_code):
     contline = None
     indents = [0]
 
-    print(f'source code inside = {source_code}')
-    amount_of_lines = len(source_code.split("\n"))
-    print(f'lines amount: {amount_of_lines}')
-
     for line in source_code.split('\n'):
 
-        print(f'current_line: {line}')
         line_number += 1
         chars_in_line = len(line)
         char_number = 0
@@ -279,7 +274,10 @@ def tokenize(source_code):
                         tokens.append(Token(name='STRING', text=token, starts=spos, ends=epos, context=line))
 
                 elif initial.isidentifier():               # ordinary name
-                    tokens.append(Token(name='NAME', text=token, starts=spos, ends=epos, context=line))
+                    if token.upper() in TOKEN_DICT:  # is reserved as keyword
+                        tokens.append(Token(name=token.upper(), text=token, starts=spos, ends=epos, context=line))
+                    else:
+                        tokens.append(Token(name='NAME', text=token, starts=spos, ends=epos, context=line))
                 elif initial == '\\':                      # continued stmt
                     continued = 1
                 else:

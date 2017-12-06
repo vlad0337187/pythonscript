@@ -67,6 +67,7 @@ TOKEN_DICT = {
     'ERRORTOKEN': {'token_id': 56},
     'N_TOKENS': {'token_id': 57},
     'NL': {'token_id': 58},
+    'IMPORT': {'token_id': 59, 'string_repr': 'import'},  # import statement
     'NT_OFFSET': {'token_id': 256},  # Special definitions for cooperation with parser
     # shows current offset (tabs or spaces amount)
 }
