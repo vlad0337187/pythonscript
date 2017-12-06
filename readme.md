@@ -351,7 +351,7 @@
         finally
                expression
 
-        try -> expression; expression_2; except Exception as inst -> expression <- finally -> expression
+        try -> expression; expression_2 <- except Exception as inst -> expression <- finally -> expression
     ```
 
 
@@ -377,6 +377,8 @@
         ```
     - written in one line:
         ```coffeescript
+        if var_1 > var_2 -> var_3 = var_2
+        ```
 
 
 

@@ -3,14 +3,14 @@
 
 import os
 import os.path
-from scanner import generate_tokens
+from scanner import tokenize
 
 
 if __name__ == '__main__':
 	cur_dir = os.path.dirname (__file__)
 	scanner_test_file_path = os.path.join (cur_dir, './scanner_test.python')
 	scanner_test_file = open(scanner_test_file_path, 'tr')
-	source_code_example = scanner_test_file.readline
-	tokens = generate_tokens(source_code_example)
+	source_code = scanner_test_file.read()
+	tokens = tokenize(source_code)
 	for i in tokens:
-		print (i)
+		print (i.name, i.text)
