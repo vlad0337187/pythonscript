@@ -9,40 +9,91 @@ Contains list of tokens, token classes and things to operate with them.
 TOKEN_DICT = {
     # 59 items,   46 were from standard detail tokens
     'ENDMARKER': {'token_id': 0},  # EOF
+    'NL': {'token_id': 58},
     'NAME': {'token_id': 1},  # all stuff, like variable's names, some operators
+    'OPERATOR': {'token_id': 53},
     'NUMBER': {'token_id': 2},
     'STRING': {'token_id': 3},
     'NEWLINE': {'token_id': 4},
     'INDENT': {'token_id': 5},  # tabs amount from starting of line increased
     'DEDENT': {'token_id': 6},  # tabs amount from starting of line decreased
-    'LPAR': {'token_id': 7, 'string_repr': '('},
-    'RPAR': {'token_id': 8, 'string_repr': ')'},
-    'LSQB': {'token_id': 9, 'string_repr': '['},
-    'RSQB': {'token_id': 10, 'string_repr': ']'},
+
+    'ERRORTOKEN': {'token_id': 56},
+    'N_TOKENS': {'token_id': 57},
+    'NT_OFFSET': {'token_id': 256},  # Special definitions for cooperation with parser
+    # (shows current offset (tabs or spaces amount))
+
+    'AWAIT': {'token_id': 54, 'string_repr': 'await'},  # added string
+    'ASYNC': {'token_id': 55, 'string_repr': 'async'},  # added string
+
+    'IMPORT': {'token_id': 59, 'string_repr': 'import'},  # import statement
+    'USING': {'token_id': 65, 'string_repr': 'using'},
+    'FROM': {'token_id': 60, 'string_repr': 'from'},
+    'AS': {'token_id': 61, 'string_repr': 'as'},
+
+    'FUNCTION': {'token_id': 62, 'string_repr': 'function'},
+    'DEF': {'token_id': 63, 'string_repr': 'def'},
+    'RETURN': {'token_id': 64, 'string_repr': 'return'},
+    'YIELD': {'token_id': 65, 'string_repr': 'yield'},
+
+    'CLASS': {'token_id': 65, 'string_repr': 'class'},
+
+    'FOR': {'token_id': 65, 'string_repr': 'for'},
+    'WHILE': {'token_id': 65, 'string_repr': 'while'},
+    'BREAK': {'token_id': 65, 'string_repr': 'break'},
+    'CONTINUE': {'token_id': 65, 'string_repr': 'continue'},
+
+    'IF': {'token_id': 65, 'string_repr': 'if'},
+    'ELIF': {'token_id': 65, 'string_repr': 'elif'},
+    'ELSE': {'token_id': 65, 'string_repr': 'else'},
+
+    'SWITCH': {'token_id': 65, 'string_repr': 'switch'},
+    'WHEN': {'token_id': 65, 'string_repr': 'when'},
+
+    'TRY': {'token_id': 65, 'string_repr': 'try'},
+    'EXCEPT': {'token_id': 65, 'string_repr': 'except'},
+    'FINALLY': {'token_id': 65, 'string_repr': 'finally'},
+
+    'NOT': {'token_id': 65, 'string_repr': 'not'},
+    'AND': {'token_id': 65, 'string_repr': 'and'},
+    'OR': {'token_id': 65, 'string_repr': 'or'},
+
+    'LPAR': {'token_id': 10, 'string_repr': '('},
+    'RPAR': {'token_id': 11, 'string_repr': ')'},
+    'LSQB': {'token_id': 12, 'string_repr': '['},
+    'RSQB': {'token_id': 13, 'string_repr': ']'},
+    'LBRACE': {'token_id': 25, 'string_repr': '{'},
+    'RBRACE': {'token_id': 26, 'string_repr': '}'},
+
     'COLON': {'token_id': 11, 'string_repr': ':'},
     'COMMA': {'token_id': 12, 'string_repr': ','},
     'SEMI': {'token_id': 13, 'string_repr': ';'},
+    'DOT': {'token_id': 23, 'string_repr': '.'},
+    'AT': {'token_id': 49, 'string_repr': '@'},
+    'EQUAL': {'token_id': 22, 'string_repr': '='},
+    'RARROW': {'token_id': 51, 'string_repr': '->'},
+    'LARROW': {'token_id': 51, 'string_repr': '<-'},
+    'ELLIPSIS': {'token_id': 52, 'string_repr': '...'},
+
     'PLUS': {'token_id': 14, 'string_repr': '+'},
     'MINUS': {'token_id': 15, 'string_repr': '-'},
     'STAR': {'token_id': 16, 'string_repr': '*'},
     'SLASH': {'token_id': 17, 'string_repr': '/'},
+    'DOUBLESLASH': {'token_id': 47, 'string_repr': '//'},
+    'PERCENT': {'token_id': 24, 'string_repr': '%'},
     'VBAR': {'token_id': 18, 'string_repr': '|'},
     'AMPER': {'token_id': 19, 'string_repr': '&'},
     'LESS': {'token_id': 20, 'string_repr': '<'},
     'GREATER': {'token_id': 21, 'string_repr': '>'},
-    'EQUAL': {'token_id': 22, 'string_repr': '='},
-    'DOT': {'token_id': 23, 'string_repr': '.'},
-    'PERCENT': {'token_id': 24, 'string_repr': '%'},
-    'LBRACE': {'token_id': 25, 'string_repr': '{'},
-    'RBRACE': {'token_id': 26, 'string_repr': '}'},
-    'EQEQUAL': {'token_id': 27, 'string_repr': '=='},
-    'NOTEQUAL': {'token_id': 28, 'string_repr': '!='},
-    'LESSEQUAL': {'token_id': 29, 'string_repr': '<='},
-    'GREATEREQUAL': {'token_id': 30, 'string_repr': '>='},
     'TILDE': {'token_id': 31, 'string_repr': '~'},
     'CIRCUMFLEX': {'token_id': 32, 'string_repr': '^'},
     'LEFTSHIFT': {'token_id': 33, 'string_repr': '<<'},
     'RIGHTSHIFT': {'token_id': 34, 'string_repr': '>>'},
+
+    'EQEQUAL': {'token_id': 27, 'string_repr': '=='},
+    'NOTEQUAL': {'token_id': 28, 'string_repr': '!='},
+    'LESSEQUAL': {'token_id': 29, 'string_repr': '<='},
+    'GREATEREQUAL': {'token_id': 30, 'string_repr': '>='},
     'DOUBLESTAR': {'token_id': 35, 'string_repr': '**'},
     'PLUSEQUAL': {'token_id': 36, 'string_repr': '+='},
     'MINEQUAL': {'token_id': 37, 'string_repr': '-='},
@@ -55,21 +106,8 @@ TOKEN_DICT = {
     'LEFTSHIFTEQUAL': {'token_id': 44, 'string_repr': '<<='},
     'RIGHTSHIFTEQUAL': {'token_id': 45, 'string_repr': '>>='},
     'DOUBLESTAREQUAL': {'token_id': 46, 'string_repr': '**='},
-    'DOUBLESLASH': {'token_id': 47, 'string_repr': '//'},
     'DOUBLESLASHEQUAL': {'token_id': 48, 'string_repr': '//='},
-    'AT': {'token_id': 49, 'string_repr': '@'},
     'ATEQUAL': {'token_id': 50, 'string_repr': '@='},
-    'RARROW': {'token_id': 51, 'string_repr': '->'},
-    'ELLIPSIS': {'token_id': 52, 'string_repr': '...'},
-    'OP': {'token_id': 53},
-    'AWAIT': {'token_id': 54, 'string_repr': 'await'},  # added string
-    'ASYNC': {'token_id': 55, 'string_repr': 'async'},  # added string
-    'ERRORTOKEN': {'token_id': 56},
-    'N_TOKENS': {'token_id': 57},
-    'NL': {'token_id': 58},
-    'IMPORT': {'token_id': 59, 'string_repr': 'import'},  # import statement
-    'NT_OFFSET': {'token_id': 256},  # Special definitions for cooperation with parser
-    # shows current offset (tabs or spaces amount)
 }
 
 
