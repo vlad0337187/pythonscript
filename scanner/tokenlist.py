@@ -14,7 +14,7 @@ TOKEN_DICT = {
     'OPERATOR': {'token_id': 3},
     'NUMBER': {'token_id': 4},
     'STRING': {'token_id': 5},
-    'NEWLINE': {'token_id': 6},
+    'EOL': {'token_id': 6},  # end of line
     'INDENT': {'token_id': 7},  # tabs amount from starting of line increased
     'DEDENT': {'token_id': 8},  # tabs amount from starting of line decreased
 
@@ -67,7 +67,7 @@ TOKEN_DICT = {
 
     'COLON': {'token_id': 140, 'string_repr': ':'},
     'COMMA': {'token_id': 141, 'string_repr': ','},
-    'SEMI': {'token_id': 142, 'string_repr': ';'},
+    'SEMICOLON': {'token_id': 142, 'string_repr': ';'},
     'DOT': {'token_id': 143, 'string_repr': '.'},
     'AT': {'token_id': 144, 'string_repr': '@'},
     'EQUAL': {'token_id': 145, 'string_repr': '='},
