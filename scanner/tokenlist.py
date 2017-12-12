@@ -8,8 +8,8 @@ Contains list of tokens, token classes and things to operate with them.
 
 TOKEN_DICT = {
     # 59 items,   46 were from standard detail tokens
-    'ENDMARKER': {'token_id': 0},  # EOF
-    'NL': {'token_id': 1},
+    'EOF': {'token_id': 0},  # EOF
+    #'NL': {'token_id': 1},  # maybe to remove this. Were similar: NEWLINE, NL
     'NAME': {'token_id': 2},  # all stuff, like variable's names, some operators
     'OPERATOR': {'token_id': 3},
     'NUMBER': {'token_id': 4},
@@ -18,20 +18,20 @@ TOKEN_DICT = {
     'INDENT': {'token_id': 7},  # tabs amount from starting of line increased
     'DEDENT': {'token_id': 8},  # tabs amount from starting of line decreased
 
-    'ERRORTOKEN': {'token_id': 30},
-    'N_TOKENS': {'token_id': 31},
-    'NT_OFFSET': {'token_id': 32},  # Special definitions for cooperation with parser
+    'ERRORTOKEN': {'token_id': 20},
+    'N_TOKENS': {'token_id': 21},
+    'NT_OFFSET': {'token_id': 22},  # Special definitions for cooperation with parser
     # (shows current offset (tabs or spaces amount))
 
     'IMPORT': {'token_id': 40, 'string_repr': 'import'},  # import statement
-    'USING': {'token_id': 10, 'string_repr': 'using'},
+    'USING': {'token_id': 41, 'string_repr': 'using'},
     'FROM': {'token_id': 42, 'string_repr': 'from'},
     'AS': {'token_id': 43, 'string_repr': 'as'},
 
     'FUNCTION': {'token_id': 50, 'string_repr': 'function'},
     'DEF': {'token_id': 51, 'string_repr': 'def'},
     'RETURN': {'token_id': 52, 'string_repr': 'return'},
-    'YIELD': {'token_id': 53, 'string_repr': 'yield'},
+    'YIELD': {'token_id': 33, 'string_repr': 'yield'},
 
     'AWAIT': {'token_id': 60, 'string_repr': 'await'},
     'ASYNC': {'token_id': 61, 'string_repr': 'async'},

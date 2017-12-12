@@ -1,3 +1,8 @@
+"""
+TODO:
+    skip_identifier()  # decide, to add it or not, temporary passed
+"""
+
 import navigation_methods
 import expecting_methods
 

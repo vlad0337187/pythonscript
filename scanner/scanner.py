@@ -132,6 +132,7 @@ def tokenize(source_code):
     indents = [0]
 
     for line in source_code.split('\n'):
+        line += ('\n')  # because removed by .split()
 
         line_number += 1
         chars_in_line = len(line)
@@ -182,7 +183,7 @@ def tokenize(source_code):
                                         ends=(line_number, char_number + len(comment_token)), context=line))
                     char_number += len(comment_token)
 
-                tokens.append(Token(name='NL', text=line[char_number:],
+                tokens.append(Token(name='EOL', text=line[char_number:],
                            starts=(line_number, char_number), ends=(line_number, len(line)),
                            context=line))
                 continue
@@ -221,9 +222,9 @@ def tokenize(source_code):
                     tokens.append(Token(name='NUMBER', text=token, starts=spos, ends=epos, context=line))
                 elif initial in '\r\n':
                     if parenlev > 0:
-                        tokens.append(Token(name='NL', text=token, starts=spos, ends=epos, context=line))
+                        tokens.append(Token(name='EOL', text=token, starts=spos, ends=epos, context=line))
                     else:
-                        tokens.append(Token(name='NEWLINE', text=token, starts=spos, ends=epos, context=line))
+                        tokens.append(Token(name='EOL', text=token, starts=spos, ends=epos, context=line))
 
                 elif initial == '#':
                     assert not token.endswith("\n")
@@ -292,5 +293,5 @@ def tokenize(source_code):
                 char_number += 1
 
 
-    tokens.append(Token(name='ENDMARKER', starts=(line_number, 0), ends=(line_number, 0)))
+    tokens.append(Token(name='EOF', starts=(line_number, 0), ends=(line_number, 0)))
     return tokens
