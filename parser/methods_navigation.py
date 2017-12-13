@@ -17,3 +17,11 @@ def previous_token(self):
 def set_current_token(self, index):
     self.current_token_index = index
     self.current_token = self.tokens[index]
+
+
+def get_current_line(self):
+    return self.current_token.starts[0]
+
+
+def get_current_column(self):
+    return self.current_token.starts[1]

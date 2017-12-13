@@ -24,7 +24,7 @@ TOKEN_DICT = {
     # (shows current offset (tabs or spaces amount))
 
     'IMPORT': {'token_id': 40, 'string_repr': 'import'},  # import statement
-    'USING': {'token_id': 41, 'string_repr': 'using'},
+    # 'USING': {'token_id': 41, 'string_repr': 'using'},  # maybe to remove it, but implicitly import this function
     'FROM': {'token_id': 42, 'string_repr': 'from'},
     'AS': {'token_id': 43, 'string_repr': 'as'},
 
@@ -32,6 +32,8 @@ TOKEN_DICT = {
     'DEF': {'token_id': 51, 'string_repr': 'def'},
     'RETURN': {'token_id': 52, 'string_repr': 'return'},
     'YIELD': {'token_id': 33, 'string_repr': 'yield'},
+    'GLOBAL': {'token_id': 34, 'string_repr': 'global'},
+    'NONLOCAL': {'token_id': 35, 'string_repr': 'nonlocal'},
 
     'AWAIT': {'token_id': 60, 'string_repr': 'await'},
     'ASYNC': {'token_id': 61, 'string_repr': 'async'},
@@ -53,10 +55,17 @@ TOKEN_DICT = {
     'TRY': {'token_id': 110, 'string_repr': 'try'},
     'EXCEPT': {'token_id': 111, 'string_repr': 'except'},
     'FINALLY': {'token_id': 112, 'string_repr': 'finally'},
+    'RAISE': {'token_id': 113, 'string_repr': 'raise'},
+    'ASSERT': {'token_id': 114, 'string_repr': 'assert'},
 
-    'NOT': {'token_id': 120, 'string_repr': 'not'},
-    'AND': {'token_id': 121, 'string_repr': 'and'},
-    'OR': {'token_id': 122, 'string_repr': 'or'},
+    'WITH': {'token_id': 116, 'string_repr': 'with'},
+
+    'IS': {'token_id': 120, 'string_repr': 'is'},
+    'NOT': {'token_id': 121, 'string_repr': 'not'},
+    'AND': {'token_id': 122, 'string_repr': 'and'},
+    'OR': {'token_id': 123, 'string_repr': 'or'},
+    'IN': {'token_id': 124, 'string_repr': 'in'},
+    'DEL': {'token_id': 125, 'string_repr': 'del'},
 
     'LPAR': {'token_id': 130, 'string_repr': '('},
     'RPAR': {'token_id': 131, 'string_repr': ')'},
@@ -132,6 +141,15 @@ class Token:
         self.starts = starts
         self.ends = ends
         self.context = context
+
+    def show_details(self):
+        """Returns string with detailed description of token.
+        """
+        return f'''Token:
+Name: {self.name}
+Text: {self.text}
+Starts (line number, character number): {self.starts}
+Ends (line number, character number): {self.ends}'''
 
     @staticmethod
     def get_name_by_token_id(token_id):

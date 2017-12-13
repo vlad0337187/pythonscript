@@ -6,7 +6,7 @@ import collections
 import itertools as _itertools
 import re
 import sys
-from tokenlist import Token, TOKEN_DICT
+from .tokenlist import Token, TOKEN_DICT
 
 
 cookie_re = re.compile(r'^[ \t\f]*#.*?coding[:=][ \t]*([-\w.]+)', re.ASCII)
