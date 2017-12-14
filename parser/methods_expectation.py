@@ -64,7 +64,14 @@ def expect(self, token_name):
     if self.probably(token_name):
         return True
     else:
-        self.raise_parser_error()
+        self.raise_parse_error(expected=token_name)
+
+
+def expect_eol(self):
+    if self.probably_eol():
+        return True
+    else:
+        self.raise_parse_error(expected="''EOL' or 'SEMICOLON'")
 
 
 def expect_name(self):
@@ -114,11 +121,15 @@ def is_comment(self):
 def is_name(self):
     """If current token has type name, returns True, otherwise - False
     """
-    pass
+    if self.current_token.name == 'NAME':
+        return True
+    else:
+        return False
 
 
 def get_name(self):
     """If current token has type name, returns it, otherwise - raises ParseError.
+    Swithes to next token.
     """
     if self.current_token.name == 'NAME':
         text = self.current_token.text

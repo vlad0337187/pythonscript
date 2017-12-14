@@ -286,7 +286,12 @@ def tokenize(source_code):
                         parenlev += 1
                     elif initial in ')]}':
                         parenlev -= 1
-                    tokens.append(Token(name='OPERATOR', text=token, starts=spos, ends=epos, context=line))
+                    for key in TOKEN_DICT:
+                        if TOKEN_DICT[key].get('string_repr') == token:
+                            tokens.append(Token(name=key, text=token, starts=spos, ends=epos, context=line))
+                            break
+                    else:
+                        tokens.append(Token(name='OPERATOR', text=token, starts=spos, ends=epos, context=line))
             else:
                 tokens.append(Token(name='ERRORTOKEN', text=line[char_number], starts=(line_number, char_number),
                                     ends=(line_number, char_number+1), context=line))
