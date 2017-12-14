@@ -91,12 +91,20 @@ def expect_binary_operator(self):
 
 def is_expression(self):
     """Checks next tokens to detect: is it expression, or not.
+    Often is used on a start of line to detect: does it has expression or statement
+    TODO:
+        make check: does it starts from 'def', or number, or string, by this
+            to check and give decision.
     """
-    pass
+    if not (self.is_comment() or self.is_statement()):
+        return True
+    else:
+        return False
 
 
 def is_statement(self):
-    """Checks next tokens to detect: is it expression, or not.
+    """Checks next tokens to detect: is it expression, or not
+    Often is used on a start of line to detect: does it has expression or statement
     """
     if self.current_token.name in ['NAME', 'IMPORT', 'FROM',
         'FUNCTION', 'RETURN', 'YIELD', 'GLOBAL', 'NONLOCAL', 'ASYNC', 'AWAIT',
@@ -109,6 +117,17 @@ def is_statement(self):
             if self.probably('EOL'):
                 self.set_current_token(cur_position)
                 return False
+        return True
+    else:
+        return False
+
+
+def is_comment(self):
+    """Checks next tokens to detect: is it a comment, or not
+    Often is used on a start of line to detect: does it containg
+        comment, or expression, or statement
+    """
+    if self.current_token.name == '#':
         return True
     else:
         return False
@@ -145,3 +164,12 @@ def is_string_literal(self):
 
 def is_number_literal(self):
     pass
+
+
+def detect_data_type(self):
+    """Wrapper over is_expression(), is_statement(), is_comment()
+    Detects near data type (starting from current token)
+    Often is used on a start of line to detect: does it has expression or statement
+    If current token is name:
+        if next token is '=' - it's statement
+    """

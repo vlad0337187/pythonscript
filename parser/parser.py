@@ -7,6 +7,8 @@ TODO:
         skip_symbol_name: do I need to add there skipping numbers / names
     Write:
         all methods in parse_methods_data.py
+    Add to README.md:
+        '==' is synonim to 'is', '===' checks: is it the same object
 """
 
 import os, os.path
@@ -47,7 +49,7 @@ class Parser:
         raise errors.ParseError(f'Error. File: {self.filename}. Expected name, got {self.current_token.show_details()}')
 
 
-def assing_methods_to_parser():
+def assign_methods_to_parser():
     for mn in method_modules:
         for attr_name in dir(eval(mn)):
             attribute = eval(mn + '.' + attr_name)
@@ -55,4 +57,4 @@ def assing_methods_to_parser():
                 setattr(Parser, attr_name, attribute)
             elif attr_name.isupper():
                 setattr(Parser, attr_name, attribute)
-assing_methods_to_parser()
+assign_methods_to_parser()
