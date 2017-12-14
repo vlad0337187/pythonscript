@@ -89,14 +89,20 @@ def expect_binary_operator(self):
     pass
 
 
-def is_expression(self):
-    """Checks next tokens to detect: is it expression, or not.
+def line_is_comment(self):
+    """Checks current and next tokens to detect: is it a comment, or not
+    Often is used on a start of line to detect: does it containg
+        comment, or expression, or statement
     """
-    pass
+    if self.current_token.name == '#':
+        return True
+    else:
+        return False
 
 
-def is_statement(self):
-    """Checks next tokens to detect: is it expression, or not.
+def line_is_statement(self):
+    """Checks current and next tokens to detect: is it expression, or not
+    Often is used on a start of line to detect: does it has expression or statement
     """
     if self.current_token.name in ['NAME', 'IMPORT', 'FROM',
         'FUNCTION', 'RETURN', 'YIELD', 'GLOBAL', 'NONLOCAL', 'ASYNC', 'AWAIT',
@@ -109,13 +115,24 @@ def is_statement(self):
             if self.probably('EOL'):
                 self.set_current_token(cur_position)
                 return False
+            else:
+                return True
         return True
     else:
         return False
 
 
-def is_comment(self):
-    pass
+def line_is_expression(self):
+    """Checks current and next tokens to detect: is it expression, or not.
+    Often is used on a start of line to detect: does it has expression or statement
+    TODO:
+        make check: does it starts from 'def', or number, or string, by this
+            to check and give decision.
+    """
+    if self.current_token.name in ('NAME', 'NUMBER', 'STRING', 'NOT'):
+        return True
+    else:
+        return False
 
 
 def is_name(self):
@@ -145,3 +162,12 @@ def is_string_literal(self):
 
 def is_number_literal(self):
     pass
+
+
+def detect_data_type(self):
+    """Wrapper over is_expression(), is_statement(), is_comment()
+    Detects near data type (starting from current token)
+    Often is used on a start of line to detect: does it has expression or statement
+    If current token is name:
+        if next token is '=' - it's statement
+    """

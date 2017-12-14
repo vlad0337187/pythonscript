@@ -1,5 +1,5 @@
 #! /usr/bin/python3
-"""Tests import statement.
+"""Tests 'from import' statement.
 """
 
 
@@ -10,7 +10,7 @@ import ast
 import types
 
 files_dir = os.path.dirname(__file__)
-pythonscript_dir = os.path.abspath(os.path.join (files_dir, '../'))
+pythonscript_dir = os.path.abspath(os.path.join (files_dir, '../../'))
 sys.path.insert(0, pythonscript_dir)
 
 from scanner.scanner import tokenize
@@ -18,16 +18,14 @@ from parser.parser import Parser
 
 
 source_code = """
-import os
-import os,sys
-import os as osos, sys
-import os as sosos,sys as sysys
+from os import path
+from os import path as dirname, abspath
+from os.path import dirname abspath as bspth
 
-import os sys as sysys
-import os as oso   sys
-import os as oso   sys as soso,types,ast
-import os.path
-import os.path as ospather   sys as soso,types,ast   os.path.dirname as dirname
+from os.path import dirname, abspath as bspth isrelative
+
+from .os.path import dirname
+from ....os.path import dirname
 """
 
 

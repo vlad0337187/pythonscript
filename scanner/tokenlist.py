@@ -17,6 +17,7 @@ TOKEN_DICT = {
     'EOL': {'token_id': 6},  # end of line
     'INDENT': {'token_id': 7},  # tabs amount from starting of line increased
     'DEDENT': {'token_id': 8},  # tabs amount from starting of line decreased
+    'COMMENT': {'token_id': 9, 'string_repr': '#'},
 
     'ERRORTOKEN': {'token_id': 20},
     'N_TOKENS': {'token_id': 21},

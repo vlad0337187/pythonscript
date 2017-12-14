@@ -29,7 +29,7 @@ switch b
 if __name__ == '__main__':
 	cur_dir = os.path.dirname (__file__)
 
-    scanner_dir = os.path.join (cur_dir, '../scanner')
+    scanner_dir = os.path.join (cur_dir, '../../scanner')
     sys.path.append (scanner_dir)
 
 	tokens = tokenize(scanner_test_code)
