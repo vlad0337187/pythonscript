@@ -5,7 +5,7 @@ import os, os.path
 from os.path import join, abspath
 import sys
 import ast
-from ast import Module, Import, alias
+from ast import Module, Import, alias  # maybe to remove 'Module'
 
 pythonscript_dir = os.environ['PYTHONSCRIPT_DIR']
 sys.path.insert(0, pythonscript_dir)
@@ -14,22 +14,8 @@ from scanner.scanner import tokenize
 from parser.parser import Parser
 
 
-source_code = '''
-import os
-import os,sys
-import os as osos, sys
-import os as sosos,sys as sysys
-
-import os sys as sysys
-import os as oso   sys
-import os as oso   sys as soso,types,ast
-import os.path
-import os.path as ospather   sys as soso,types,ast   os.path.dirname as dirname
-'''
-
-
 def test_import_1():
-    code_1 = '''import os'''
+    code_1 = 'import os'
 
     expected_ast_node = ast.Import(names=[ast.alias(name='os', asname=None)])
     expected_ast_node_string = ast.dump(expected_ast_node)
@@ -45,7 +31,7 @@ def test_import_1():
 
 
 def test_import_2():
-    code_1 = '''import os,sys'''
+    code_1 = 'import os,sys'
 
     expected_ast_node = Import(names=[alias(name='os', asname=None), alias(name='sys', asname=None)])
     expected_ast_node_string = ast.dump(expected_ast_node)
@@ -61,7 +47,7 @@ def test_import_2():
 
 
 def test_import_3():
-    code_1 = '''import os as osos, sys'''
+    code_1 = 'import os as osos, sys'
 
     expected_ast_node = Import(names=[alias(name='os', asname='osos'), alias(name='sys', asname=None)])
     expected_ast_node_string = ast.dump(expected_ast_node)
@@ -80,7 +66,7 @@ def test_import_3():
 
 
 def test_import_4():
-    code_1 = '''import os as sosos,sys as sysys'''
+    code_1 = 'import os as sosos,sys as sysys'
 
     expected_ast_node = Import(names=[alias(name='os', asname='sosos'), alias(name='sys', asname='sysys')])
     expected_ast_node_string = ast.dump(expected_ast_node)
@@ -96,7 +82,7 @@ def test_import_4():
 
 
 def test_import_5():
-    code_1 = '''import os sys as sysys'''
+    code_1 = 'import os sys as sysys'
 
     expected_ast_node = Import(names=[alias(name='os', asname=None), alias(name='sys', asname='sysys')])
     expected_ast_node_string = ast.dump(expected_ast_node)
@@ -112,7 +98,7 @@ def test_import_5():
 
 
 def test_import_6():
-    code_1 = '''import os as oso   sys'''
+    code_1 = 'import os as oso   sys'
 
     expected_ast_node = Import(names=[alias(name='os', asname='oso'), alias(name='sys', asname=None)])
     expected_ast_node_string = ast.dump(expected_ast_node)
@@ -128,7 +114,7 @@ def test_import_6():
 
 
 def test_import_7():
-    code_1 = '''import os as oso   sys as soso,types,ast'''
+    code_1 = 'import os as oso   sys as soso,types,ast'
 
     expected_ast_node = Import(names=[
         alias(name='os', asname='oso'),alias(name='sys', asname='soso'),
@@ -147,7 +133,7 @@ def test_import_7():
 
 
 def test_import_8():
-    code_1 = '''import os.path'''
+    code_1 = 'import os.path'
 
     expected_ast_node = Import(names=[alias(name='os.path', asname=None)])
     expected_ast_node_string = ast.dump(expected_ast_node)
@@ -163,7 +149,7 @@ def test_import_8():
 
 
 def test_import_9():
-    code_1 = '''import os.path as ospather   sys as soso,types,ast   os.path.dirname as dirname'''
+    code_1 = 'import os.path as ospather   sys as soso,types,ast   os.path.dirname as dirname'
 
     expected_ast_node = Import(names=[
         alias(name='os.path', asname='ospather'),alias(name='sys', asname='soso'),
