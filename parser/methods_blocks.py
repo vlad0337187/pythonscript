@@ -1,4 +1,5 @@
 """Contains methods for parsing blocks \ lines, etc.
+Main file, it's methods are launched just after starting parsing with "parse.py".
 """
 
 
@@ -45,8 +46,8 @@ def parse_line(self):
     elif self.line_is_statement():
         node = self.parse_statement()
     elif self.line_is_expression():
-        #node = self.parse_expression()  # will be uncomented later
-        raise ValueError('expressions are unsupported yet')
+        node = self.parse_expression()  # will be uncomented later
+        #raise ValueError('expressions are unsupported yet')
     else:
         self.raise_parse_error(expected=('statement', 'expression', 'comment'))
 

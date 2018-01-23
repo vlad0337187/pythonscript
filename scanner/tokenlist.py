@@ -11,8 +11,8 @@ TOKEN_DICT = {
     'EOF': {'token_id': 0},  # EOF
     #'NL': {'token_id': 1},  # maybe to remove this. Were similar: NEWLINE, NL
     'NAME': {'token_id': 2},  # all stuff, like variable's names, some operators
-    'OPERATOR': {'token_id': 3},
-    'NUMBER': {'token_id': 4},
+    'OPERATOR': {'token_id': 3},  # other operator, except specified below
+    'NUMBER': {'token_id': 4},  # all kinds of numbers (integer: 1, 2; floats: 0.5, 2.8, octal: 0o100, hexadecimal:0x40, little: 0e2)
     'STRING': {'token_id': 5},
     'EOL': {'token_id': 6},  # end of line
     'INDENT': {'token_id': 7},  # tabs amount from starting of line increased
@@ -80,7 +80,6 @@ TOKEN_DICT = {
     'SEMICOLON': {'token_id': 142, 'string_repr': ';'},
     'DOT': {'token_id': 143, 'string_repr': '.'},
     'AT': {'token_id': 144, 'string_repr': '@'},
-    'EQUAL': {'token_id': 145, 'string_repr': '='},
     'RARROW': {'token_id': 146, 'string_repr': '->'},
     'LARROW': {'token_id': 147, 'string_repr': '<-'},
     'ELLIPSIS': {'token_id': 148, 'string_repr': '...'},
@@ -95,18 +94,20 @@ TOKEN_DICT = {
     'AMPER': {'token_id': 167, 'string_repr': '&'},
     'LESS': {'token_id': 168, 'string_repr': '<'},
     'GREATER': {'token_id': 169, 'string_repr': '>'},
-    'TILDE': {'token_id': 170, 'string_repr': '~'},
+    'TILDE': {'token_id': 170, 'string_repr': '~'},  # complement operator, flips bits
     'CIRCUMFLEX': {'token_id': 171, 'string_repr': '^'},
     'LEFTSHIFT': {'token_id': 172, 'string_repr': '<<'},
     'RIGHTSHIFT': {'token_id': 173, 'string_repr': '>>'},
+    'DOUBLESTAR': {'token_id': 174, 'string_repr': '**'},
 
     'EQEQUAL': {'token_id': 190, 'string_repr': '=='},
     'NOTEQUAL': {'token_id': 191, 'string_repr': '!='},
     'LESSEQUAL': {'token_id': 192, 'string_repr': '<='},
     'GREATEREQUAL': {'token_id': 193, 'string_repr': '>='},
-    'DOUBLESTAR': {'token_id': 194, 'string_repr': '**'},
+
+    'EQUAL': {'token_id': 194, 'string_repr': '='},
     'PLUSEQUAL': {'token_id': 195, 'string_repr': '+='},
-    'MINEQUAL': {'token_id': 196, 'string_repr': '-='},
+    'MINUSEQUAL': {'token_id': 196, 'string_repr': '-='},
     'STAREQUAL': {'token_id': 197, 'string_repr': '*='},
     'SLASHEQUAL': {'token_id': 198, 'string_repr': '/='},
     'PERCENTEQUAL': {'token_id': 199, 'string_repr': '%='},

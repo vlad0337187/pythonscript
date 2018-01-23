@@ -1,0 +1,194 @@
+Parsing expression:
+	- not bad article, but in Java: http://www.craftinginterpreters.com/parsing-expressions.html
+	- http://www.engr.mun.ca/~theo/Misc/exp_parsing.htm
+	- parsing python grammar with python: http://effbot.org/zone/simple-top-down-parsing.htm
+		maybe the best (and simpler) parser to parse expressions
+		maybe we'll use it
+	- helpful library to make recursive descent parsers: http://pyparsing.wikispaces.com/
+
+
+
+
+Expressions.
+	Their's structure:
+		xpression → literal
+			| unary
+			| binary
+			| grouping ;
+
+		literal	→ NUMBER | STRING | "false" | "true" | "nil" ;
+		grouping	→ "(" expression ")" ;
+		unary	 	→ ( "-" | "!" ) expression ;
+		binary	→ expression operator expression ;
+		operator	→ "==" | "!=" | "<" | "<=" | ">" | ">="
+				| "+"  | "-"  | "*" | "/" ;
+
+	Python operator precedence:
+		http://www.mathcs.emory.edu/~valerie/courses/fall10/155/resources/op_precedence.html
+
+	There are next types of literals:
+		- strings (bytes and strings)
+		- numbers (integer, float, octal, hexadecimal, little (with 'e'), imaginary (complex))
+
+
+
+ways to do this:
+	(temparary rejected) - We can build simple vocabulary-list tree to represent expression with all it's subexpressions:
+		code:
+			3 + 4 * 2
+		it's tree:
+			{'+': [3, {'*': [4, 2]}]}
+		code:
+			3 + - - 2
+		it's tree:
+			{'+': [3, {'-': {'-': [2]}}]}
+		code:
+			3 + 2 ** 4 - 1
+		it's tree:
+			{'+'}  # it's hard to represent
+		Here dictionary represents some operation, list inside - objects with which action is performed.
+		In case of unary operator there is only one object in list, binary - two.
+
+	Way 1. At first - unary operators, at second - binary:
+		- code:
+			3 + 2 ** 4 - - 1
+		- At first we must analyze where expression ends. If it's general expression - than it ends when
+			'\n' or ';' is met (one of EOL symbols).
+			Every expression can only be on one line (general or inline). Inline line starts with token '(',
+				ends when token ')' is met. EOL symbols are ignored.
+			When we'll have all expression, parsing it would be much easier.
+		- scan all expression on tokens, than find there all operators,
+			operands, write them down by order so:
+				[Operand(3), Operator(+), Operand(2), Operator(**), Operand(4), Operator(-), Operator(-), Operand(1)]
+			Operand, Operator - classes to represent operands and operators.
+			We pass tokens to that classes.
+		- find unary operators, if they're present - group them with operands.
+				[Operand(3), Operator(+), Operand(2), Operator(**), Operand(4), Operator(-), Expression(Operator(-), Operand(1))]
+			Expression - class to represent some expression.
+		- find binary operators, if they're present - group them with operands
+			, at first - group operators with higher priority.
+			Step 1. Operator **:
+				[Operand(3), Operator(+), Operand(2), Operator(**), Operand(4), Operator(-), Expression(Operator(-), Operand(1))]
+
+	Way 2. Operators by priority.
+		- code:
+			3 + 2 ** - 4 - - 1
+		- How Python parses it (ast.dump(ast.parse('3 + 2 ** - 4 - - 1'))):
+			'Module(body=[Expr(value=BinOp(left=BinOp(left=Num(n=3), op=Add(), right=BinOp(left=Num(n=2), op=Pow(), right=UnaryOp(op=USub(), operand=Num(n=4)))), op=Sub(), right=UnaryOp(op=USub(), operand=Num(n=1))))])'
+
+			Module(
+				body=[
+					Expr(
+						value=BinOp(
+							left=BinOp(
+								left=Num(n=3), op=Add(), right=BinOp(
+									left=Num(n=2), op=Pow(), right=UnaryOp(op=USub(), operand=Num(n=4))
+									)
+							),
+							op=Sub(),
+							right=UnaryOp(op=USub(), operand=Num(n=1))
+						)
+					)
+				]
+			)
+
+		- At first we must analyze where expression ends. If it's general expression - than it ends when
+			'\n' or ';' is met (one of EOL symbols).
+			Every expression can only be on one line (general or inline). Inline line starts with token '(',
+				ends when token ')' is met. EOL symbols are ignored.
+			When we'll have all expression, parsing it would be much easier.
+
+		- scan all expression on tokens, than find there all operators,
+			operands, write them down by order so:
+				[Operand(3), Operator(+), Operand(2), Operator(**), Operator(-), Operand(4), Operator(-), Operator(-), Operand(1)]
+			Operand, Operator - classes to represent operands and operators.
+			We pass tokens to that classes.
+			That classes are used only for convenience, when creating AST,
+				they would be replaced by tokens, they contain.
+
+		- if operators are present - take at first ones with most priority
+				and group with operands.
+			If between 2 operands there are more than one operator, first one
+				is considered as binary, other - as unary.
+			If we apply binary operator and before second operand there is one
+				or more unary operators, we apply them first.
+			If there are several unary operators, we apply them from right to
+				left by order.
+
+			Step 1. Operator **.
+				As before right operand after ** there is another operator,
+					it's considered as unary and is applied to operand first.
+				Step 1.1. Apply all operators (except **) to Operand(4).
+					ExpressionUnary(Operator(-), Operand(4))
+				Step 1.2. Make expression from **.
+					ExpressionBinary(Operator(**), Operand(2), ExpressionUnary(Operator(-), Operand(4)))
+				or shortly:
+					ExprBin(2 ** (-4))
+
+			Step 2. All other operators have same priority. So we start from left to right (because Python compiler does so).
+				What do we have:
+					[Operand(3), Operator(+), ExprBin(2 ** (-4)), Operator(-), Operator(-), Operand(1)]
+				Next action:
+					Now we'll parse from left to right, starting from the first "+" operator.
+				Step 2.1. Parsing first "+"
+					What do we have:
+						[Operand(3), Operator(+), ExprBin(2 ** (-4)), Operator(-), Operator(-), Operand(1)]
+					our parsed part:
+						ExpressionBinary(Operand(3), Operator(+) ExprBin(2 ** (-4)))
+					or shortly:
+						ExprBin(3 + ExprBin(2 ** (-4)))
+				Step 2.2. Parsing next operator - "-"
+					What do we have:
+						[ExprBin(3 + ExprBin(2 ** (-4))), Operator(-), Operator(-), Operand(1)]
+					Comments:
+						as just after our current operator there is not operand, but
+						another one operator ("-" too), we consider it as unary operator
+						to our current right operand (1).
+					Step 2.2.1. Apply unary "-" to right operand 1.
+						Return:
+							ExpressionUnary(Operator(-), Operand(1))
+						or shortly:
+							ExprUn(-1)
+					What do we have:
+						[ExprBin(3 + ExprBin(2 ** (-4))), Operator(-), ExprUn(-1)]
+					Return:
+						ExpressionBinary(ExprBin(3 + (2 ** (-4))), Operator(-), ExprUn(-1))
+					or shortly:
+						ExprBin(ExprBin(3 + ExprBin(2 ** (-4))) - ExprUn(-1))
+			After "Step 2" we have result of expression parsing:
+				ExprBin(ExprBin(3 + ExprBin(2 ** ExprUn(-4))) - ExprUn(-1))
+
+		Tokens for "Way 2":
+			EOL
+
+			NUMBER 3
+			PLUS +
+			NUMBER 2
+			DOUBLESTAR **
+			MINUS -
+			NUMBER 4
+			MINUS -
+			MINUS -
+			NUMBER 1
+			EOL
+
+			EOL
+
+			EOF
+
+
+
+modify local variablse:
+	. source: https://stackoverflow.com/questions/34650744/modify-existing-variable-in-locals-or-frame-f-locals
+
+
+def a():
+	import sys
+	import ctypes
+	frame = sys._getframe(0)
+	#frame.f_locals['bbbb'] = 4444
+	frame.f_locals.update({'bbbb': 4444})
+	ctypes.pythonapi.PyFrame_LocalsToFast(ctypes.py_object(frame), ctypes.c_int(1))
+	print(bbbb)
+
+a()

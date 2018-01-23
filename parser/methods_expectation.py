@@ -1,8 +1,15 @@
 """Contains functions that probably or expect something.
-Accept - means that if current token has given type - it goes to next token and returns True,
-otherwise - returnes False.
-Expects -
+Probably - means that if current token has given type - it goes to next token and returns True,
+    otherwise - returnes False.
+Expect - means that if current token has given type - it goes to next token and returns True,
+    otherwise - raises Exception
+Is - means that if current token has given type - returns True, otherwise - False.
+Line is - means if line has given type - returns True, otherwise - False.
+Get - means if token has given type - returns it's value, otherwise - raises error.
+Detect line - detects type of given line, returns it.
 """
+
+from . import represent
 
 
 def probably(self, token_name):
@@ -111,6 +118,8 @@ def line_is_statement(self):
         'TRY', 'RAISE', 'ASSERT', 'WITH', 'DEL',
     ]:
         if self.current_token.name == 'NAME':
+            # special case, can be statement, if "=" will be met ln line,
+            # otherwise it's exression
             cur_position = self.current_token_index
             if self.probably('EOL'):
                 self.set_current_token(cur_position)
@@ -129,7 +138,7 @@ def line_is_expression(self):
         make check: does it starts from 'def', or number, or string, by this
             to check and give decision.
     """
-    if self.current_token.name in ('NAME', 'NUMBER', 'STRING', 'NOT'):
+    if self.current_token.name in ['NAME', 'NUMBER', 'STRING'].extend(operators.UNARY_OPERATORS):
         return True
     else:
         return False
@@ -144,6 +153,14 @@ def is_name(self):
         return False
 
 
+def is_string_literal(self):
+    pass
+
+
+def is_number_literal(self):
+    pass
+
+
 def get_name(self):
     """If current token has type name, returns it, otherwise - raises ParseError.
     Swithes to next token.
@@ -154,14 +171,6 @@ def get_name(self):
         return text
     else:
         self.raise_expected_name()
-
-
-def is_string_literal(self):
-    pass
-
-
-def is_number_literal(self):
-    pass
 
 
 def detect_data_type(self):

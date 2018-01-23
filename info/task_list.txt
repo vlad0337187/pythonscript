@@ -1,0 +1,21 @@
+All lines, started with '+' are finished, started with '-' - not finished.
+
+
+
+
+tasks:
+	+ write scanner package:
+		+ write list of tokens, token class
+		+ write scanner (take it from CPython and adapt)
+	+ write parser package:
+		+ write main parser class
+	- corrections 1:
+		- write module with normal regular expressions ({start}{[a-b], +}{numbers, 2}{end})
+			It must use standard python regex module as backend:
+				- add function: autotranslate - automatically translating
+					from "bad" regular expressions (module re)
+					to ours ones
+				- translating and executing our regular expressions to
+					"bad" ones (module re)
+		- rewrite scanner to use that module with normal regular expressions
+		- add ability for scanner to scan multiline comments (starting from "###", ending with "###")

@@ -25,3 +25,13 @@ def get_current_line(self):
 
 def get_current_column(self):
     return self.current_token.starts[1]
+
+
+def find_end_of_line(self):
+    """Finds the end of general or logical line.
+    If it's a general line - than current token must be the first token from
+    this line,
+    if it's logical line, current token must be on an opening bracket "("
+    for this logical line.
+    """
+    current_position = 
