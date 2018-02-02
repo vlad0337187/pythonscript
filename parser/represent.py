@@ -107,3 +107,9 @@ OPERATORS_PRIORITY = {
 OPERATORS_DIRECTION = {
     # direction, on which to apply operators if they have same priority
 }
+
+
+EOL_TOKENS = [
+    # tokens, that represent end of general line with source code - end of expression
+    'SEMICOLON', 'EOL',
+]

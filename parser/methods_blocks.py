@@ -30,11 +30,12 @@ def parse_line(self):
     """Parses one line.
     Doesn't matter, is it real line, or inline line,
     or line was continued. Parses all till the logic end of line.
-    If line was not started - searches it's start and parses it.\
+    If line was not started - searches it's start and parses it.
     Returns AST node which was on current line; False if line contained comment,
     or None if it was a comment.
     """
     node = None
+    print('parsing line')
 
     if self.current_token.name == 'EOL':
         self.next_token()

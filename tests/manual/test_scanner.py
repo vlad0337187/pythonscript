@@ -51,7 +51,10 @@ def test_number_test():
 a = 4
 a == 4
 a === 4
+some_function()
     '''
+    test_line_bounds_detection = '''
+'''
 
     tokens = tokenize(our_expression)
     for token in tokens: print(token.name, token.text)

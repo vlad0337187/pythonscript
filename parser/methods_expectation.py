@@ -1,12 +1,16 @@
 """Contains functions that probably or expect something.
+
 Probably - means that if current token has given type - it goes to next token and returns True,
     otherwise - returnes False.
 Expect - means that if current token has given type - it goes to next token and returns True,
     otherwise - raises Exception
-Is - means that if current token has given type - returns True, otherwise - False.
+Is type - means that if current token has given type - returns True, otherwise - False.
 Line is - means if line has given type - returns True, otherwise - False.
 Get - means if token has given type - returns it's value, otherwise - raises error.
 Detect line - detects type of given line, returns it.
+
+All this functions will be assigned to Parser class as methods,
+use them as "self.method_name()", no need to import them.
 """
 
 from . import represent
@@ -40,7 +44,7 @@ def probably_separator(self):
 
 
 def probably_eol(self):
-    if self.current_token.name in ['SEMICOLON', 'EOL']:
+    if self.current_token.name in represent.EOL_TOKENS:
         self.next_token()
         return True
     else:
@@ -78,7 +82,7 @@ def expect_eol(self):
     if self.probably_eol():
         return True
     else:
-        self.raise_parse_error(expected="''EOL' or 'SEMICOLON'")
+        self.raise_parse_error(expected=f'some EOL token: {represent.EOL_TOKENS}')
 
 
 def expect_name(self):
@@ -138,14 +142,25 @@ def line_is_expression(self):
         make check: does it starts from 'def', or number, or string, by this
             to check and give decision.
     """
-    if self.current_token.name in ['NAME', 'NUMBER', 'STRING'].extend(operators.UNARY_OPERATORS):
+    if self.current_token.name in (
+        ['NAME', 'NUMBER', 'STRING', 'LPAR'] + represent.UNARY_OPERATORS
+    ):
+        return True
+    else:
+        return False
+
+
+def is_type(self, token_type):
+    """If current token has given type - returns True, otherwise - False.
+    """
+    if self.current_token.name == token_type:
         return True
     else:
         return False
 
 
 def is_name(self):
-    """If current token has type name, returns True, otherwise - False
+    """If current token has type name, returns True, otherwise - False.
     """
     if self.current_token.name == 'NAME':
         return True
@@ -153,7 +168,18 @@ def is_name(self):
         return False
 
 
+def is_eol(self):
+    """If current token represents end of line - returns True, otherwise - False.
+    """
+    if self.current_token.name in represent.EOL_TOKENS:
+        return True
+    else:
+        return False
+
+
 def is_string_literal(self):
+    # probably not needed because scanner returns token type string,
+    # it's value - string value
     pass
 
 
