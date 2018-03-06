@@ -21,6 +21,10 @@ from parser.parser import Parser
 
 
 
+
+
+
+
 #####################
 ######## Python Code:
 
@@ -34,7 +38,7 @@ def test_from_import_1():
     for token in tokens: print(token.name, token.text)
 
     parser = Parser(tokens)
-    ast_node = parser.parse(mode='line')
+    ast_node = parser.parse(mode='one_line')
     ast_node_string = ast.dump(ast_node)
 
     assert ast_node_string == expected_ast_node_string
@@ -53,7 +57,7 @@ function test_from_import_1
     for token in tokens -> print token.name, token.text
 
     parser = Parser tokens
-    ast_node = parser.parse mode='line'
+    ast_node = parser.parse mode='one_line'
     ast_node_string = ast.dump ast_node
 
     assert ast_node_string == expected_ast_node_string
@@ -61,18 +65,31 @@ function test_from_import_1
 
 
 
+
+
+
+
 #####################
 ######## Python Code:
 
-def some_extra_test():
+def some_extra_test(arg_1, arg_2, arg_3, func_3):
     func_1 = func_2(arg_1, arg_2(func_3(arg_3)))
 
 
 #####################
 ## PythonScript Code:
 
-function some_extra_test
+def arg_1, arg_2, arg_3, func_3
     func_1 = func_2 arg_1 arg_2 (func_3 arg_3)
+
+# or:
+
+function(some_extra_test)       # space before '(' is optional
+    func_1 = func_2 arg_1 arg_2 (func_3 arg_3)
+
+
+
+
 
 
 
@@ -92,8 +109,13 @@ deleted sections = Section.objects.all_by_order().filter(place='some_place').exc
 
 deleted sections = Section.objects
     .all_by_order()
+    .some_object
     .filter place='some_place'
     .exclude havesome_prop=None
+
+
+
+
 
 
 
@@ -107,9 +129,54 @@ NewClass(arg1, arg2, func1(arg3)).some_method().some_method_2()
 #####################
 ## PythonScript Code:
 
-NewClass arg1 arg2 (func1 arg3)
-    .some_method()    # requires indent
+NewClas arg1, arg2, func1(arg3)
+    .some_method()
     .some_method_2()
+
+# or:
+
+NewClas arg1 arg2 func1(arg3)
+    .some_method()
+    .some_method_2()
+
+
+
+
+
+
+
+
+# if you call some function, you can pass arguments to it without commas
+# but if you already pass arguments and want to pass as argument
+# called with some argument function - than you must place it into
+
+
+
+
+
+
+
+
+
+expected_ast_node = ImportFrom(module='os', names=[alias(name='path', asname=None)], level=0).some_method().some_method_2(arg1, arg2, 324)
+
+
+expected_ast_node = ImportFrom
+    module='os' names=list alias name='path' asname=None; level=0
+        .some_method ()
+        .some_method_2
+            arg, arg2, 324
+
+# after indent if name starts from '.' - it's attribute taking,
+# if without - it means calling with passing arguments
+#
+# if newline - continuing taking attributes or passing attributs for object
+# calling,
+# if indent - all same, but only for curent object before indent
+
+
+
+
 
 
 
@@ -125,6 +192,15 @@ a = [a, b, c, 14, 228, 563].reverse()
 
 a = list a b c 14 228 563
     .reverse()
+
+# but this would give an error:
+a = list a b c 14 228 563
+    reverse()
+# , because calling lists is impossible,
+# also, probably, there's no such function 'reverse'
+
+
+
 
 
 
@@ -146,3 +222,21 @@ a = list a b c 14 228 563
     .reverse()
     .extend list 7 8 9 10 12 somevariable
         .reverse()
+
+
+
+
+
+
+
+
+#####################
+######## Python Code:
+
+a = lambda x, y: x + y
+
+
+#####################
+## PythonScript Code:
+
+a = fn x, y -> return x + y

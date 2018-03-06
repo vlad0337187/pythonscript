@@ -9,6 +9,7 @@ tasks:
 		+ write scanner (take it from CPython and adapt)
 	+ write parser package:
 		+ write main parser class
+		- add possibility to build in Python code
 	- corrections 1:
 		- write module with normal regular expressions ({start}{[a-b], +}{numbers, 2}{end})
 			It must use standard python regex module as backend:
@@ -19,3 +20,5 @@ tasks:
 					"bad" ones (module re)
 		- rewrite scanner to use that module with normal regular expressions
 		- add ability for scanner to scan multiline comments (starting from "###", ending with "###")
+	- add possibility to launch PythonScript scripts directly from python module:
+		python -m pythonscript ./path/to/module/module.python

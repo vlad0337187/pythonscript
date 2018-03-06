@@ -32,5 +32,5 @@ def test_number_test():
     0e2    # == 0.0
     '''
 
-    tokens = tokenize(code_1)
+    tokens = tokenize(numbers_literals)
     for token in tokens: print(token.name, token.text)

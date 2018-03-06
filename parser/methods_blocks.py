@@ -3,55 +3,32 @@ Main file, it's methods are launched just after starting parsing with "parse.py"
 """
 
 
-def parse_block(self):
-    """Parses block, returns AST node.
+def parse_block(self, one_line=False):
+    """Parses nodes to the end of block, returns list of AST nodes.
     Block - is, for example, body of function, or of class, or of module.
     Returns list of nodes.
+    Arguments:
+        mode: can be 'one' - that will be parsed only one line, can be None -
+            will be parsed all block
     """
     block_nodes = []
+
     while True:
-        line = self.parse_line()
-        print('this time "line" was:', line)
-        if line == 'EOL':
-            continue
-        elif line == 'EOF':
-            break
-        elif line == 'COMMENT':
-            continue
-        elif line:  # some AST node
-            block_nodes.append(line)
-        else:
-            self.raise_parse_error(expected=('statement', 'expression', 'comment', 'EOL', 'EOF'))
+        node = None
+        line_type = self.detect_line_type()
+
+        if line_type == 'comment':
+            self.expect_comment()
+        elif line_type == 'statement':
+            node = self.parse_statement()
+        elif line_type == 'expression':
+            node = self.parse_expression()
+        elif line_type == 'empty':
+            self.next_token()
+
+        if one_line:
+            return node
+        if node:
+            block_nodes.append(node)
 
     return block_nodes
-
-
-def parse_line(self):
-    """Parses one line.
-    Doesn't matter, is it real line, or inline line,
-    or line was continued. Parses all till the logic end of line.
-    If line was not started - searches it's start and parses it.
-    Returns AST node which was on current line; False if line contained comment,
-    or None if it was a comment.
-    """
-    node = None
-    print('parsing line')
-
-    if self.current_token.name == 'EOL':
-        self.next_token()
-        node = 'EOL'
-    elif self.current_token.name == 'EOF':
-        node = 'EOF'
-    elif self.line_is_comment():  # add accept_comment
-        node = 'COMMENT'
-    elif self.line_is_statement():
-        node = self.parse_statement()
-    elif self.line_is_expression():
-        node = self.parse_expression()  # will be uncomented later
-        #raise ValueError('expressions are unsupported yet')
-    else:
-        self.raise_parse_error(expected=('statement', 'expression', 'comment'))
-
-    if not node:
-        raise ValueError('node was None')
-    return node

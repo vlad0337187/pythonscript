@@ -33,6 +33,10 @@ class Parser:
 
     def parse(self, mode='module'):
         """Parses self.tokens to AST tree, returns it.
+        Possible modes:
+            'module': parses all module until EOF, returns module AST node
+            'block': parses all nodes on one indent level, returns list of nodes
+            'one_line': parses one expression or one statement
         """
         if mode == 'module':
             nodes = self.parse_block()
@@ -41,8 +45,8 @@ class Parser:
         elif mode == 'block':
             nodes = self.parse_block()
             return nodes
-        elif mode == 'line':
-            node = self.parse_line()  # method placed in "method_blocks.py" too
+        elif mode == 'one_line':  # not used any more
+            node = self.parse_block(one_line=True)  # method placed in "method_blocks.py" too
             return node
         else:
             raise ValueError(f'Unsupported mode: {mode}')
@@ -55,12 +59,6 @@ class Parser:
             if token not in self.ignored_tokens:
                 new_tokenlist.append(token)
         self.tokens = new_tokenlist
-
-    def raise_parse_error(self, expected):
-        raise errors.ParseError(f'Error. File: {self.filename}. Expected any of {expected}, got {self.current_token.show_details()}')
-
-    def raise_expected_name(self):
-        raise errors.ParseError(f'Error. File: {self.filename}. Expected name, got {self.current_token.show_details()}')
 
 
 def add_methods_to_parser():

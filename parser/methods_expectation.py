@@ -6,6 +6,7 @@ Expect - means that if current token has given type - it goes to next token and 
     otherwise - raises Exception
 Is type - means that if current token has given type - returns True, otherwise - False.
 Line is - means if line has given type - returns True, otherwise - False.
+    Assume, that current token - is first token in line.
 Get - means if token has given type - returns it's value, otherwise - raises error.
 Detect line - detects type of given line, returns it.
 
@@ -21,6 +22,14 @@ def probably(self, token_name):
     or in Token class as 'name' parameter.
     """
     if self.current_token.name == token_name:
+        self.next_token()
+        return True
+    else:
+        return False
+
+
+def probably_comment(self):
+    if self.current_token.name == 'COMMENT':
         self.next_token()
         return True
     else:
@@ -92,6 +101,13 @@ def expect_name(self):
         self.raise_expected_name()
 
 
+def expect_comment(self):
+    if self.probably_comment():
+        return True
+    else:
+        self.raise_parse_error(expected='COMMENT token')
+
+
 def expect_unary_operator(self):
     pass
 
@@ -116,14 +132,13 @@ def line_is_statement(self):
     Often is used on a start of line to detect: does it has expression or statement
     """
     if self.current_token.name in ['NAME', 'IMPORT', 'FROM',
-        'FUNCTION', 'RETURN', 'YIELD', 'GLOBAL', 'NONLOCAL', 'ASYNC', 'AWAIT',
+        'FUNCTION', 'DEF', 'FN', 'RETURN', 'YIELD', 'GLOBAL', 'NONLOCAL', 'ASYNC', 'AWAIT',
         'CLASS',
         'FOR', 'WHILE', 'IF', 'SWITCH',
         'TRY', 'RAISE', 'ASSERT', 'WITH', 'DEL',
     ]:
+        # if there's only one name in line - it's returned and it's expression
         if self.current_token.name == 'NAME':
-            # special case, can be statement, if "=" will be met ln line,
-            # otherwise it's exression
             cur_position = self.current_token_index
             if self.probably('EOL'):
                 self.set_current_token(cur_position)
@@ -138,13 +153,26 @@ def line_is_statement(self):
 def line_is_expression(self):
     """Checks current and next tokens to detect: is it expression, or not.
     Often is used on a start of line to detect: does it has expression or statement
-    TODO:
-        make check: does it starts from 'def', or number, or string, by this
-            to check and give decision.
     """
     if self.current_token.name in (
         ['NAME', 'NUMBER', 'STRING', 'LPAR'] + represent.UNARY_OPERATORS
     ):
+        start_of_line = self.current_token_index
+        end_of_line = self.find_end_of_expression_line()
+
+        # detect "=" inside of line, they're marker that it's statement
+        for indx in range(start_of_line, end_of_line + 1):
+            if self.tokens[indx].name == 'EQUAL': return False
+
+        return True
+    else:
+        return False
+
+
+def line_is_empty(self):
+    """Checks, whether line contains something, or not.
+    """
+    if self.current_token.name == 'EOL':
         return True
     else:
         return False
@@ -199,10 +227,21 @@ def get_name(self):
         self.raise_expected_name()
 
 
-def detect_data_type(self):
+def detect_line_type(self):
     """Wrapper over is_expression(), is_statement(), is_comment()
     Detects near data type (starting from current token)
     Often is used on a start of line to detect: does it has expression or statement
-    If current token is name:
-        if next token is '=' - it's statement
+    It checks for statement first, because statement detection is more easy.
+    Returns:
+        'comment', 'statement', 'expression'
     """
+    if self.line_is_empty():
+        return 'empty'
+    elif self.line_is_comment():
+        return 'comment'
+    elif self.line_is_statement():
+        return 'statement'
+    elif self.line_is_expression():
+        return 'expression'
+    else:
+        self.raise_unknown_line()

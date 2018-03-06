@@ -27,14 +27,15 @@ from parser.parser import Parser
 
 def test_bounds_simple():
     """Tests detecting by parser bounds of lines, general and inline.
-    Here are only simple cases, to be sure "Parser.find_end_of_line()" works well.
+    Here are only simple cases, to be sure "Parser.find_end_of_expression_line()" works well.
     """
 
     def find_and_print_eol(parser, line_type):
         """Searches for the end of current line.
         Requires parser to be on the first token of line.
         """
-        token_start, token_end = parser.find_end_of_line(line_type)
+        token_start = parser.current_token_index
+        token_end = parser.find_end_of_expression_line(line_type)
         return token_start, token_end
 
     def print_debug_info():

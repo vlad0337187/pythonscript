@@ -24,7 +24,7 @@ def test_import_1():
     for token in tokens: print(token.name, token.text)
 
     parser = Parser(tokens)
-    ast_node = parser.parse(mode='line')
+    ast_node = parser.parse(mode='one_line')
     ast_node_string = ast.dump(ast_node)
 
     assert ast_node_string == expected_ast_node_string
@@ -40,7 +40,7 @@ def test_import_2():
     for token in tokens: print(token.name, token.text)
 
     parser = Parser(tokens)
-    ast_node = parser.parse(mode='line')
+    ast_node = parser.parse(mode='one_line')
     ast_node_string = ast.dump(ast_node)
 
     assert ast_node_string == expected_ast_node_string
@@ -57,7 +57,7 @@ def test_import_3():
     for token in tokens: print(token.name, token.text)
 
     parser = Parser(tokens)
-    ast_node = parser.parse(mode='line')
+    ast_node = parser.parse(mode='one_line')
     ast_node_string = ast.dump(ast_node)
 
     print('ast_node_string:', ast_node_string)
@@ -75,7 +75,7 @@ def test_import_4():
     for token in tokens: print(token.name, token.text)
 
     parser = Parser(tokens)
-    ast_node = parser.parse(mode='line')
+    ast_node = parser.parse(mode='one_line')
     ast_node_string = ast.dump(ast_node)
 
     assert ast_node_string == expected_ast_node_string
@@ -91,7 +91,7 @@ def test_import_5():
     for token in tokens: print(token.name, token.text)
 
     parser = Parser(tokens)
-    ast_node = parser.parse(mode='line')
+    ast_node = parser.parse(mode='one_line')
     ast_node_string = ast.dump(ast_node)
 
     assert ast_node_string == expected_ast_node_string
@@ -107,7 +107,7 @@ def test_import_6():
     for token in tokens: print(token.name, token.text)
 
     parser = Parser(tokens)
-    ast_node = parser.parse(mode='line')
+    ast_node = parser.parse(mode='one_line')
     ast_node_string = ast.dump(ast_node)
 
     assert ast_node_string == expected_ast_node_string
@@ -126,7 +126,7 @@ def test_import_7():
     for token in tokens: print(token.name, token.text)
 
     parser = Parser(tokens)
-    ast_node = parser.parse(mode='line')
+    ast_node = parser.parse(mode='one_line')
     ast_node_string = ast.dump(ast_node)
 
     assert ast_node_string == expected_ast_node_string
@@ -142,7 +142,7 @@ def test_import_8():
     for token in tokens: print(token.name, token.text)
 
     parser = Parser(tokens)
-    ast_node = parser.parse(mode='line')
+    ast_node = parser.parse(mode='one_line')
     ast_node_string = ast.dump(ast_node)
 
     assert ast_node_string == expected_ast_node_string
@@ -162,7 +162,7 @@ def test_import_9():
     for token in tokens: print(token.name, token.text)
 
     parser = Parser(tokens)
-    ast_node = parser.parse(mode='line')
+    ast_node = parser.parse(mode='one_line')
     ast_node_string = ast.dump(ast_node)
 
     assert ast_node_string == expected_ast_node_string
