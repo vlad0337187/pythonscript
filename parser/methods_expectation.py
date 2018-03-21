@@ -132,7 +132,7 @@ def line_is_statement(self):
     Often is used on a start of line to detect: does it has expression or statement
     """
     if self.current_token.name in ['NAME', 'IMPORT', 'FROM',
-        'FUNCTION', 'DEF', 'FN', 'RETURN', 'YIELD', 'GLOBAL', 'NONLOCAL', 'ASYNC', 'AWAIT',
+        'FUNCTION', 'DEF', 'RETURN', 'YIELD', 'GLOBAL', 'NONLOCAL', 'ASYNC', 'AWAIT',
         'CLASS',
         'FOR', 'WHILE', 'IF', 'SWITCH',
         'TRY', 'RAISE', 'ASSERT', 'WITH', 'DEL',
@@ -140,7 +140,8 @@ def line_is_statement(self):
         # if there's only one name in line - it's returned and it's expression
         if self.current_token.name == 'NAME':
             cur_position = self.current_token_index
-            if self.probably('EOL'):
+            self.next_token()
+            if self.is_type('EOL'):
                 self.set_current_token(cur_position)
                 return False
             else:
@@ -155,7 +156,7 @@ def line_is_expression(self):
     Often is used on a start of line to detect: does it has expression or statement
     """
     if self.current_token.name in (
-        ['NAME', 'NUMBER', 'STRING', 'LPAR'] + represent.UNARY_OPERATORS
+        ['NAME', 'NUMBER', 'STRING', 'LPAR', 'FN'] + represent.UNARY_OPERATORS
     ):
         start_of_line = self.current_token_index
         end_of_line = self.find_end_of_expression_line()

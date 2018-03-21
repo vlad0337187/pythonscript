@@ -36,83 +36,170 @@ from parser.parser import Parser
 def test_line_type_simple():
     """Tests detecting of basic lines with different line types.
     """
-    code = '''
+    code_1 = '''
 5 + 4
 
 (a + 5)
-a = 3
 fn a b -> a + b
-
-# some comment
 some_variable_name
+'''
+    # line 2: from 1  to 4     #  5 + 4
+    # line 4: from 6  to 11    #  (a + 5)
+    # line 5: from 12 to 19    #  fn a b -> a + b
+    # line 6: from 20 to 21    #  some_variable_name
 
+    code_2 = '''
+a = 3
 def a():
 return some_war
 yield 4 + 4
-
 if x == 4
 switch some_name
-
-import os, sys
-from some_module import some_variable
-
 try
 raise ValueError
-
+import os, sys
+from some_module import some_variable
 '''
+    # line 2:  from 1  to 4     #  a = 3
+    # line 3:  from 5  to 10    #  def a():
+    # line 4:  from 11 to 13    #  return some_war
+    # line 5:  from 14 to 18    #  yield 4 + 4
+    # line 6:  from 19 to 23    #  if x == 4
+    # line 7:  from 24 to 26    #  switch some_name
+    # line 8:  from 27 to 28    #  try
+    # line 9:  from 29 to 31    #  raise ValueError
 
-    code_with_descriptions = '''
-5 + 4                                                           # from 1  to 4
+    # line 10: from 32 to 36    #  import os, sys
+    # line 11: from 37 to 41    #  from some_module import some_variable
 
-(a + 5)                                                         # from 6  to 11
-a = 3                                                           # from 12 to 15
-fn a b -> a + b                                                 # from 16 to 23
+    code_3 = '''
+# some comment
+    # some comment 2
+'''
+    # line 2:  from 1  to 2
+    # line 3:  from 3  to 4
 
-# some comment                                                  # from 25 to 26
-some_variable_name                                              # from 27 to 28
+    # Helpful debug info:
+    # (you can use them to debug functions)
+    #print ('cur token: ', parser_2.current_token.name, parser_2.current_token.text)
+    #print ('token context: ', parser_2.current_token.context)
+    #[print (token.name) for token in tokens_2]
 
-def a()                                                         # from 30 to 34
-return some_war                                                 # from 35 to 37
-yield 4 + 4                                                     # from 38 to 42
+    tokens_1 = tokenize(code_1)
+    parser_1 = Parser(tokens_1)
 
-if x == 4                                                       # from 44 to 48
-switch some_name                                                # from 49 to 51
+    tokens_2 = tokenize(code_2)
+    parser_2 = Parser(tokens_2)
 
-import os, sys                                                  # from 53 to 57
-from some_module import some_variable                           # from 58 to 62
-
-try                                                             # from 64 to 65
-raise ValueError                                                # from 66 to 68
-
-
-5 + 4     # starts from token with index 1, ends with index 4
-
-(a + 5)    #  with index 6, ends with index 11
-a = 3    # from index 12 to index 15
-
-# some comment    # from index 25, to index 26  (just comment)
-def a():    # from index 27 to index 32
-
-'''  # it's not used in code, just for convenience
-
-    tokens = tokenize(code)
-    parser = Parser(tokens)
+    tokens_3 = tokenize(code_3)
+    parser_3 = Parser(tokens_3)
 
     # Test .line_is_empty()
-    assert parser.line_is_empty()
-    parser.set_current_token(5)
-    assert parser.line_is_empty()
+    assert parser_1.line_is_empty()
+    parser_1.set_current_token(5)
+    assert parser_1.line_is_empty()
 
     # Test .line_is_expression()
-    parser.set_current_token(1)
-    assert parser.line_is_expression()
-    parser.set_current_token(6)  # start of "(a + 5)"
-    assert parser.line_is_expression()
-    parser.set_current_token(12)  # start of "a = 3"
-    assert not parser.line_is_expression()
+
+    # True:
+    parser_1.set_current_token(1)           # 5 + 4
+    assert parser_1.line_is_expression()
+    parser_1.set_current_token(6)           # (a + 5)
+    assert parser_1.line_is_expression()
+    parser_1.set_current_token(12)          # fn a b -> a + b
+    assert parser_1.line_is_expression()
+    parser_1.set_current_token(20)          # some_variable_name
+    assert parser_1.line_is_expression()
+    # False:
+    parser_2.set_current_token(1)           # a = 3
+    assert not parser_2.line_is_expression()
+    parser_2.set_current_token(5)           # def a():
+    assert not parser_2.line_is_expression()
+    parser_2.set_current_token(11)          # return some_war
+    assert not parser_2.line_is_expression()
+    parser_2.set_current_token(14)          # yield 4 + 4
+    assert not parser_2.line_is_expression()
+    parser_2.set_current_token(19)          # if x == 4
+    assert not parser_2.line_is_expression()
+    parser_2.set_current_token(24)          # switch some_name
+    assert not parser_2.line_is_expression()
+    parser_2.set_current_token(27)          # try
+    assert not parser_2.line_is_expression()
+    parser_2.set_current_token(29)          # raise ValueError
+    assert not parser_2.line_is_expression()
+    parser_2.set_current_token(32)          # import os, sys
+    assert not parser_2.line_is_expression()
+    parser_2.set_current_token(37)          # from some_module import some_variable
+    assert not parser_2.line_is_expression()
 
     # Test .line_is_statement()
-    parser.set_current_token(12)
-    assert parser.line_is_statement()
-    parser.set_current_token(19)
-    assert parser.line_is_statement()
+
+    # True
+    parser_2.set_current_token(1)           # a = 3
+    assert parser_2.line_is_statement()
+    parser_2.set_current_token(5)           # def a():
+    assert parser_2.line_is_statement()
+    parser_2.set_current_token(11)          # return some_war
+    assert parser_2.line_is_statement()
+    parser_2.set_current_token(14)          # yield 4 + 4
+    assert parser_2.line_is_statement()
+    parser_2.set_current_token(19)          # if x == 4
+    assert parser_2.line_is_statement()
+    parser_2.set_current_token(24)          # switch some_name
+    assert parser_2.line_is_statement()
+    parser_2.set_current_token(27)          # try
+    assert parser_2.line_is_statement()
+    parser_2.set_current_token(29)          # raise ValueError
+    assert parser_2.line_is_statement()
+    parser_2.set_current_token(32)          # import os, sys
+    assert parser_2.line_is_statement()
+    parser_2.set_current_token(37)          # from some_module import some_variable
+    assert parser_2.line_is_statement()
+    # False
+    parser_1.set_current_token(1)           # 5 + 4
+    assert not parser_1.line_is_statement()
+    parser_1.set_current_token(6)           # (a + 5)
+    assert not parser_1.line_is_statement()
+    parser_1.set_current_token(12)          # fn a b -> a + b
+    assert not parser_1.line_is_statement()
+    parser_1.set_current_token(20)          # some_variable_name
+    assert not parser_1.line_is_statement()
+
+    # Test .detect_line_type()
+
+    parser_1.set_current_token(1)           # 5 + 4
+    assert parser_1.detect_line_type() == 'expression'
+    parser_1.set_current_token(5)
+    assert parser_1.detect_line_type() == 'empty'
+    parser_1.set_current_token(6)           # (a + 5)
+    assert parser_1.detect_line_type() == 'expression'
+    parser_1.set_current_token(12)          # fn a b -> a + b
+    assert parser_1.detect_line_type() == 'expression'
+    parser_1.set_current_token(20)          # some_variable_name
+    assert parser_1.detect_line_type() == 'expression'
+
+    parser_2.set_current_token(1)           # a = 3
+    assert parser_2.detect_line_type() == 'statement'
+    parser_2.set_current_token(5)           # def a():
+    assert parser_2.detect_line_type() == 'statement'
+    parser_2.set_current_token(11)          # return some_war
+    assert parser_2.detect_line_type() == 'statement'
+    parser_2.set_current_token(14)          # yield 4 + 4
+    assert parser_2.detect_line_type() == 'statement'
+    parser_2.set_current_token(19)          # if x == 4
+    assert parser_2.detect_line_type() == 'statement'
+    parser_2.set_current_token(24)          # switch some_name
+    assert parser_2.detect_line_type() == 'statement'
+    parser_2.set_current_token(27)          # try
+    assert parser_2.detect_line_type() == 'statement'
+    parser_2.set_current_token(29)          # raise ValueError
+    assert parser_2.detect_line_type() == 'statement'
+    parser_2.set_current_token(32)          # import os, sys
+    assert parser_2.detect_line_type() == 'statement'
+    parser_2.set_current_token(37)          # from some_module import some_variable
+    assert parser_2.detect_line_type() == 'statement'
+
+    parser_3.set_current_token(1)
+    assert parser_1.detect_line_type() == 'comment'
+    parser_1.set_current_token(3)
+    assert parser_1.detect_line_type() == 'comment'
