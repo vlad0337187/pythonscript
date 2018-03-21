@@ -121,7 +121,7 @@ def line_is_comment(self):
     Often is used on a start of line to detect: does it containg
         comment, or expression, or statement
     """
-    if self.current_token.name == '#':
+    if self.current_token.name == 'COMMENT':
         return True
     else:
         return False

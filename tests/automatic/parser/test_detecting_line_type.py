@@ -33,22 +33,19 @@ from scanner.scanner import tokenize
 from parser.parser import Parser
 
 
-def test_line_type_simple():
-    """Tests detecting of basic lines with different line types.
-    """
-    code_1 = '''
+code_1 = '''
 5 + 4
 
 (a + 5)
 fn a b -> a + b
 some_variable_name
 '''
-    # line 2: from 1  to 4     #  5 + 4
-    # line 4: from 6  to 11    #  (a + 5)
-    # line 5: from 12 to 19    #  fn a b -> a + b
-    # line 6: from 20 to 21    #  some_variable_name
+# line 2: from 1  to 4     #  5 + 4
+# line 4: from 6  to 11    #  (a + 5)
+# line 5: from 12 to 19    #  fn a b -> a + b
+# line 6: from 20 to 21    #  some_variable_name
 
-    code_2 = '''
+code_2 = '''
 a = 3
 def a():
 return some_war
@@ -60,47 +57,54 @@ raise ValueError
 import os, sys
 from some_module import some_variable
 '''
-    # line 2:  from 1  to 4     #  a = 3
-    # line 3:  from 5  to 10    #  def a():
-    # line 4:  from 11 to 13    #  return some_war
-    # line 5:  from 14 to 18    #  yield 4 + 4
-    # line 6:  from 19 to 23    #  if x == 4
-    # line 7:  from 24 to 26    #  switch some_name
-    # line 8:  from 27 to 28    #  try
-    # line 9:  from 29 to 31    #  raise ValueError
+# line 2:  from 1  to 4     #  a = 3
+# line 3:  from 5  to 10    #  def a():
+# line 4:  from 11 to 13    #  return some_war
+# line 5:  from 14 to 18    #  yield 4 + 4
+# line 6:  from 19 to 23    #  if x == 4
+# line 7:  from 24 to 26    #  switch some_name
+# line 8:  from 27 to 28    #  try
+# line 9:  from 29 to 31    #  raise ValueError
 
-    # line 10: from 32 to 36    #  import os, sys
-    # line 11: from 37 to 41    #  from some_module import some_variable
+# line 10: from 32 to 36    #  import os, sys
+# line 11: from 37 to 41    #  from some_module import some_variable
 
-    code_3 = '''
+code_3 = '''
 # some comment
     # some comment 2
 '''
-    # line 2:  from 1  to 2
-    # line 3:  from 3  to 4
+# line 2:  from 1  to 2
+# line 3:  from 3  to 4
 
-    # Helpful debug info:
-    # (you can use them to debug functions)
-    #print ('cur token: ', parser_2.current_token.name, parser_2.current_token.text)
-    #print ('token context: ', parser_2.current_token.context)
-    #[print (token.name) for token in tokens_2]
+# Helpful debug info:
+# (you can use them to debug functions)
+#print ('cur token: ', parser_2.current_token.name, parser_2.current_token.text)
+#print ('token context: ', parser_2.current_token.context)
+#[print (token.name) for token in tokens_2]
 
-    tokens_1 = tokenize(code_1)
-    parser_1 = Parser(tokens_1)
 
-    tokens_2 = tokenize(code_2)
-    parser_2 = Parser(tokens_2)
+tokens_1 = tokenize(code_1)
+parser_1 = Parser(tokens_1)
 
-    tokens_3 = tokenize(code_3)
-    parser_3 = Parser(tokens_3)
+tokens_2 = tokenize(code_2)
+parser_2 = Parser(tokens_2)
 
-    # Test .line_is_empty()
+tokens_3 = tokenize(code_3)
+parser_3 = Parser(tokens_3)
+
+
+def test_line_is_empty():
+    """Tests 'parser.line_is_empty()' method.
+    """
+    parser_1.set_current_token(0)
     assert parser_1.line_is_empty()
     parser_1.set_current_token(5)
     assert parser_1.line_is_empty()
 
-    # Test .line_is_expression()
 
+def test_line_is_expression():
+    """Tests 'parser.line_is_expression()' method.
+    """
     # True:
     parser_1.set_current_token(1)           # 5 + 4
     assert parser_1.line_is_expression()
@@ -132,8 +136,10 @@ from some_module import some_variable
     parser_2.set_current_token(37)          # from some_module import some_variable
     assert not parser_2.line_is_expression()
 
-    # Test .line_is_statement()
 
+def test_line_is_statement():
+    """Tests 'parser.line_is_statement()' method.
+    """
     # True
     parser_2.set_current_token(1)           # a = 3
     assert parser_2.line_is_statement()
@@ -165,8 +171,19 @@ from some_module import some_variable
     parser_1.set_current_token(20)          # some_variable_name
     assert not parser_1.line_is_statement()
 
-    # Test .detect_line_type()
 
+def test_line_is_comment():
+    """Tests 'parser.line_is_comment()' method.
+    """
+    parser_3.set_current_token(1)
+    assert parser_3.line_is_comment()
+    parser_3.set_current_token(3)
+    assert parser_3.line_is_comment()
+
+
+def test_detect_line_type():
+    """Tests 'parser.detect_line_type()' method.
+    """
     parser_1.set_current_token(1)           # 5 + 4
     assert parser_1.detect_line_type() == 'expression'
     parser_1.set_current_token(5)
@@ -200,6 +217,6 @@ from some_module import some_variable
     assert parser_2.detect_line_type() == 'statement'
 
     parser_3.set_current_token(1)
-    assert parser_1.detect_line_type() == 'comment'
+    assert parser_3.detect_line_type() == 'comment'
     parser_1.set_current_token(3)
-    assert parser_1.detect_line_type() == 'comment'
+    assert parser_3.detect_line_type() == 'comment'
