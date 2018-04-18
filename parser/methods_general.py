@@ -15,7 +15,7 @@ def skip_identifier(self):
         'SWITCH', 'WHEN',
         'TRY', 'EXCEPT', 'FINALLY', 'RAISE', 'ASSERT',
         'WITH',
-        'IS', 'NOT', 'OR', 'AND', 'IN', 'DEL',
+        'IS', 'NOT', 'OR', 'AND', 'IN', 'DELETE',
     ]:
         name = self.current_token.name
         self.next_token()

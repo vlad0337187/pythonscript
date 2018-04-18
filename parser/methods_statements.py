@@ -16,7 +16,9 @@ def parse_statement(self):
 
 
 def parse_from_import_statement(self):
-    """Parses statement of such view: 'from os import path'
+    """Parses statement of such view: 'from os import path'.
+    Uses:
+        'parse_import_statement'
     """
     self.expect('FROM')
 

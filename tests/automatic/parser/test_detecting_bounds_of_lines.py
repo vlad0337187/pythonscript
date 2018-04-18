@@ -25,7 +25,7 @@ from scanner.scanner import tokenize
 from parser.parser import Parser
 
 
-def test_bounds_simple():
+def test_bounds_expression_simple():
     """Tests detecting by parser bounds of lines, general and inline.
     Here are only simple cases, to be sure "Parser.find_end_of_expression_line()" works well.
     """
@@ -105,3 +105,36 @@ def test_bounds_simple():
     assert token_start == 14
     print_debug_info()
     assert token_end == 18
+
+
+def test_bounds_statement_if():
+    def find_and_print_eol(parser, line_type):
+        """Searches for the end of current line.
+        Requires parser to be on the first token of line.
+        """
+        token_start = parser.current_token_index
+        token_end = parser.find_end_of_expression_line(line_type)
+        return token_start, token_end
+
+    def print_debug_info():
+        """Prints debug info, raises assertation error to output it.
+        """
+        nonlocal tokens, token_start, token_end
+
+        for token in tokens: print(token.name, token.text)
+        print(f'end of current line: {token_start}, {token_end}')
+        #assert False
+
+    code = '''
+if a == 3:
+    print('some text')
+'''
+
+    tokens = tokenize(code)
+    parser = Parser(tokens)
+
+    # line: "5 + 4"
+    parser.set_current_token(1)
+    token_start, token_end = find_and_print_eol(parser, 'general')
+    assert token_start == 1
+    assert token_end == 4

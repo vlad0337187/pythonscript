@@ -67,7 +67,7 @@ TOKEN_DICT = {
     'AND': {'token_id': 122, 'string_repr': 'and'},
     'OR': {'token_id': 123, 'string_repr': 'or'},
     'IN': {'token_id': 124, 'string_repr': 'in'},
-    'DEL': {'token_id': 125, 'string_repr': 'del'},
+    'DELETE': {'token_id': 125, 'string_repr': 'delete'},
 
     'LPAR': {'token_id': 130, 'string_repr': '('},
     'RPAR': {'token_id': 131, 'string_repr': ')'},

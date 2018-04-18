@@ -135,7 +135,7 @@ def line_is_statement(self):
         'FUNCTION', 'DEF', 'RETURN', 'YIELD', 'GLOBAL', 'NONLOCAL', 'ASYNC', 'AWAIT',
         'CLASS',
         'FOR', 'WHILE', 'IF', 'SWITCH',
-        'TRY', 'RAISE', 'ASSERT', 'WITH', 'DEL',
+        'TRY', 'RAISE', 'ASSERT', 'WITH', 'DELETE',
     ]:
         # if there's only one name in line - it's returned and it's expression
         if self.current_token.name == 'NAME':
@@ -246,3 +246,59 @@ def detect_line_type(self):
         return 'expression'
     else:
         self.raise_unknown_line()
+
+
+def detect_statement_type():
+    """
+    Returns back statement type depending on it's firts token.
+    """
+    if self.is_type('IMPORT'):
+        return 'import'
+    elif self.is_type('FROM'):
+        return 'from-import'
+    elif self.is_type('FUNCTION'):
+        return 'function'
+    elif self.is_type('DEF'):
+        return 'anonymous-function'
+    elif self.is_type('RETURN'):
+        return 'return'
+    elif self.is_type('YIELD'):
+        return 'yield'
+    elif self.is_type('GLOBAL'):
+        return 'global'
+    elif self.is_type('NONLOCAL'):
+        return 'nonlocal'
+    elif self.is_type('ASYNC'):
+        return 'asynchronous-function'
+    elif self.is_type('AWAIT'):
+        return 'await'
+    elif self.is_type('CLASS'):
+        return 'class-definition'
+    elif self.is_type('FOR'):
+        return 'for-loop'
+    elif self.is_type('WHILE'):
+        return 'while-loop'
+    elif self.is_type('IF'):
+        return 'if'
+    elif self.is_type('SWITCH'):
+        return 'switch'
+    elif self.is_type('TRY'):
+        return 'try'
+    elif self.is_type('RAISE'):
+        return 'raise'
+    elif self.is_type('ASSERT'):
+        return 'assert'
+    elif self.is_type('WITH'):
+        return 'with'
+    elif self.is_type('DELETE'):
+        return 'delete'
+    elif self.is_type('NAME'):
+        # TODO: make detecting assignments to tuples (tuple unpacking)
+        pos = self.current_token_index
+        self.next_token()
+        if self.is_type('EQUAL'):
+            self.set_current_token(pos)
+            return 'assignment'
+        self.set_current_token(pos)
+
+    self.raise_parse_error(expected='any known statement keyword')
