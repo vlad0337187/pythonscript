@@ -239,4 +239,4 @@ a = lambda x, y: x + y
 #####################
 ## PythonScript Code:
 
-a = fn x, y -> return x + y
+a = def x, y -> return x + y <-
