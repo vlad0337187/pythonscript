@@ -9,17 +9,17 @@ import ast
 from ast import Module, ImportFrom, alias  # maybe to remove 'Module'
 
 # remove this after manual testing <<<<
-files_dir = os.path.dirname(__file__)
-if files_dir.startswith('.'):  # is relative
-    cwd = os.getcwd()
-    files_dir = abspath(join(cwd, files_dir))
+#files_dir = os.path.dirname(__file__)
+#if files_dir.startswith('.'):  # is relative
+#    cwd = os.getcwd()
+#    files_dir = abspath(join(cwd, files_dir))
 
-ps_dir = os.path.abspath(os.path.join(files_dir, '../../../'))
-os.environ['PYTHONSCRIPT_DIR'] = ps_dir
+#ps_dir = os.path.abspath(os.path.join(files_dir, '../../../'))
+#os.environ['PYTHONSCRIPT_DIR'] = ps_dir
 # end of remove  <<<<<
 
-pythonscript_dir = os.environ['PYTHONSCRIPT_DIR']
-sys.path.insert(0, pythonscript_dir)
+#pythonscript_dir = os.environ['PYTHONSCRIPT_DIR']
+#sys.path.insert(0, pythonscript_dir)
 
 from scanner.scanner import tokenize
 from parser.parser import Parser
@@ -107,6 +107,9 @@ def test_bounds_expression_simple():
     assert token_end == 18
 
 
+# maybe they are not needed at all.
+# maybe statements could be parsed generally
+'''
 def test_bounds_statement_if():
     def find_and_print_eol(parser, line_type):
         """Searches for the end of current line.
@@ -125,10 +128,10 @@ def test_bounds_statement_if():
         print(f'end of current line: {token_start}, {token_end}')
         #assert False
 
-    code = '''
+    code = """
 if a == 3:
     print('some text')
-'''
+"""
 
     tokens = tokenize(code)
     parser = Parser(tokens)
@@ -138,3 +141,4 @@ if a == 3:
     token_start, token_end = find_and_print_eol(parser, 'general')
     assert token_start == 1
     assert token_end == 4
+'''

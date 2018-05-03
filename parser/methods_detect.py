@@ -12,6 +12,9 @@ Detect line - detects type of given line, returns it.
 
 All this functions will be assigned to Parser class as methods,
 use them as "self.method_name()", no need to import them.
+
+TODO:
+    make detecting assignments to tuples (tuple unpacking) (see 'detect_statement_type')
 """
 
 from . import represent
@@ -246,6 +249,17 @@ def detect_line_type(self):
         return 'expression'
     else:
         self.raise_unknown_line()
+
+
+def detect_expression_type(self):
+    """Detects expression type.
+    If it starts from '(', than it's 'inline' expression and it will end only on ')'.
+    Otherwise it will end on '\n' or ';'.
+    """
+    if self.is_type('LPAR'):
+        return 'inline'
+    else:
+        return 'general'
 
 
 def detect_statement_type():

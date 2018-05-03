@@ -7,6 +7,7 @@ Indents in definitions
 Not more, not less. For example, if we'll place '->' after list token, than parser will wait until nearest dedent or '<-'.
 
 
+# wrong:
 list -> 1, 2, 3, 4
 	5, 6    # indent 2
 
@@ -24,7 +25,10 @@ list
 or so:
 
 list
-	1 3 '45' list -> 1 2 3 <- 18 21
+	1 3 '45'
+	list -> 1 2 3
+	<-
+	18 21
 
 (commas are optional)
 
@@ -117,7 +121,8 @@ Of course, you can use arrow indents here:
 
 
 function_1 -> argument_1   argument_2  argument_3
-function_2() argument_5  argument_6 <-
+function_2() argument_5  argument_6
+<-
 
 
 But probably sometimes is better to just pass arguments by writting them just

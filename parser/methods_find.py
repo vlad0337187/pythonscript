@@ -65,4 +65,6 @@ so closing parenhesis can't be placed here.")
 def find_end_of_statement_line(self):
     # TODO !!!!!!!!!!!!!! THIS
     # stopped on this
+    # At first, I decided to implement expressions parsing,
+    # than to return here
     statement_type = self.detect_statement_type()

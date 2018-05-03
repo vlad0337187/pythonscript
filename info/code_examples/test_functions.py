@@ -240,3 +240,8 @@ a = lambda x, y: x + y
 ## PythonScript Code:
 
 a = def x, y -> return x + y <-
+
+a = def x y
+    x = somefunc x
+    y = process y x
+    return x + y
