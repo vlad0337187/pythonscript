@@ -144,8 +144,8 @@
     - ##### Lists:
         ```coffeescript
         list 1, 2, 3, 4, 5, 6
-        list 1, 2, 3, def a, b -> return a + b <-, 4, 5, 6
-        list 1, 2, 3, (def a, b -> return a + b), 4, 5, 6
+        list 1, 2, 3, func a, b -> return a + b <-, 4, 5, 6
+        list 1, 2, 3, (func a, b -> return a + b), 4, 5, 6
         ```
         - multiline list definition using block syntax (will be readed until dedent):
             ```coffeescript
@@ -261,33 +261,33 @@
     - expression (returns function object, which can be assigned to variable,
         or passed as argument to other function, or to be a part of list definition, etc)
         ```coffeescript
-        func_name = def arg_1, *args -> return args.append(arg_1)    # assigned to variable
-        func_name def -> return 4   # passed as argument
+        func_name = func arg_1, *args -> return args.append(arg_1)    # assigned to variable
+        func_name func -> return 4   # passed as argument
         ```
 - ##### Examples:
     ```coffeescript
-    function name arg1, arg2, **kwargs
+    func name arg1 arg2 **kwargs
         expression
         expression2
 
-    function name arg1, arg2, **kwargs -> expression; expression2
+    func name arg1, arg2, **kwargs -> expression; expression2 <-
 
-    name = def arg1, arg2 -> expression
+    name = func arg1, arg2 -> expression
 
-    name = def arg1, arg2, **kwargs
+    name = func arg1, arg2, **kwargs
             expression
 
-    name = def arg1, arg2 -> expression
+    name = func arg1, arg2 -> expression
 
-    def name argument -> expression; expression_2
+    func name argument -> expression; expression_2
 
-    a = def *args, **kwargs -> expression
+    a = func *args, **kwargs -> expression
     ```
 
 - ##### Wrong / correct examples:
     - wrong:
         ```coffeescript
-        a = def (arg, args)    # because def waits for passing arguments, and here
+        a = func (arg, args)    # because func waits for passing arguments, and here
                 expression     # data in brackets does not return anything
         ```
     - correct:
