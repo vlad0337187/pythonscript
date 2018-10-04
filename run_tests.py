@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+
 import os, os.path
 from os.path import join, abspath
 import pytest
@@ -11,11 +13,11 @@ if files_dir.startswith('.'):  # is relative
 os.chdir(files_dir)
 
 
-pythonscript_dir = abspath(join(files_dir, '../'))
+pythonscript_dir = files_dir
 os.environ['PYTHONSCRIPT_DIR'] = pythonscript_dir
 
 
-rel_parser_dir = './automatic/parser/'
+rel_parser_dir = './tests/automatic/parser/'
 abs_parser_dir = abspath(join(files_dir, rel_parser_dir))
 
 pytest.main([abs_parser_dir, '--verbose'])
