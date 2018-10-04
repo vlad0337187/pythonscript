@@ -135,7 +135,7 @@ def line_is_statement(self):
     Often is used on a start of line to detect: does it has expression or statement
     """
     if self.current_token.name in ['NAME', 'IMPORT', 'FROM',
-        'FUNCTION', 'DEF', 'RETURN', 'YIELD', 'GLOBAL', 'NONLOCAL', 'ASYNC', 'AWAIT',
+        'RETURN', 'YIELD', 'GLOBAL', 'NONLOCAL', 'ASYNC', 'AWAIT',
         'CLASS',
         'FOR', 'WHILE', 'IF', 'SWITCH',
         'TRY', 'RAISE', 'ASSERT', 'WITH', 'DELETE',
@@ -159,7 +159,7 @@ def line_is_expression(self):
     Often is used on a start of line to detect: does it has expression or statement
     """
     if self.current_token.name in (
-        ['NAME', 'NUMBER', 'STRING', 'LPAR', 'FN'] + represent.UNARY_OPERATORS
+        ['NAME', 'NUMBER', 'STRING', 'LPAR', 'FUNC'] + represent.UNARY_OPERATORS
     ):
         start_of_line = self.current_token_index
         end_of_line = self.find_end_of_expression_line()
@@ -270,9 +270,9 @@ def detect_statement_type():
         return 'import'
     elif self.is_type('FROM'):
         return 'from-import'
-    elif self.is_type('FUNCTION'):
+    elif self.is_type('FUNC'):
         return 'function'
-    elif self.is_type('DEF'):
+    elif self.is_type('DEF'):       # TODO: fix it, remove it, it sucks
         return 'anonymous-function'
     elif self.is_type('RETURN'):
         return 'return'

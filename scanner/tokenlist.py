@@ -29,9 +29,7 @@ TOKEN_DICT = {
     'FROM': {'token_id': 42, 'string_repr': 'from'},
     'AS': {'token_id': 43, 'string_repr': 'as'},
 
-    'FUNCTION': {'token_id': 50, 'string_repr': 'function'},
-    'FN': {'token_id': 53, 'string_repr': 'fn'},
-    'DEF': {'token_id': 51, 'string_repr': 'def'},
+    'FUNC': {'token_id': 50, 'string_repr': 'function'},
     'RETURN': {'token_id': 52, 'string_repr': 'return'},
     'YIELD': {'token_id': 33, 'string_repr': 'yield'},
     'GLOBAL': {'token_id': 34, 'string_repr': 'global'},

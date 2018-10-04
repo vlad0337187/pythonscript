@@ -35,7 +35,7 @@ def parse_expression(self):
             pass_rpar_if_inline()
             break
 
-        if self.current_token.name == 'DEF':
+        if self.current_token.name == 'FUNC':
             pass  # parse inline function
         elif self.current_token.name == 'OBJ':
             pass  # parse inline class

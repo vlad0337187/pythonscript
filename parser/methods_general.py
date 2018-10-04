@@ -7,7 +7,7 @@ def skip_identifier(self):
     """
     if self.current_token.name in [
         'IMPORT', 'FROM', 'AS',
-        'FUNCTION', 'DEF', 'RETURN', 'YIELD', 'GLOBAL', 'NONLOCAL',
+        'FUNC', 'RETURN', 'YIELD', 'GLOBAL', 'NONLOCAL',
         'ASYNC', 'AWAIT',
         'CLASS',
         'FOR', 'WHILE', 'BREAK', 'CONTINUE',
