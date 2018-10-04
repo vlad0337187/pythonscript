@@ -1,4 +1,5 @@
 Parsing expression:
+	- article on how to do ithis in recursive decent way: https://www.strchr.com/expression_evaluator
 	- not bad article, but in Java: http://www.craftinginterpreters.com/parsing-expressions.html
 	- http://www.engr.mun.ca/~theo/Misc/exp_parsing.htm
 	- parsing python grammar with python: http://effbot.org/zone/simple-top-down-parsing.htm
